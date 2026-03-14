@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Estimate Management System</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f4f4f4;
+padding:20px;
+}
+
+h1{
+color:#333;
+}
+
+form{
+background:white;
+padding:20px;
+width:350px;
+box-shadow:0px 0px 10px #ccc;
+}
+
+input{
+width:100%;
+padding:8px;
+margin:8px 0;
+}
+
+button{
+padding:10px;
+background:#007bff;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+table{
+margin-top:30px;
+border-collapse:collapse;
+width:100%;
+background:white;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:10px;
+text-align:center;
+}
+
+th{
+background:#007bff;
+color:white;
+}
+
+.delete{
+background:red;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Estimate Management Dashboard</h1>
+
+<form id="estimateForm">
+
+<input type="text" id="chain_id" placeholder="Chain ID" required>
+
+<input type="text" id="group_name" placeholder="Group Name" required>
+
+<input type="text" id="brand_name" placeholder="Brand Name" required>
+
+<input type="text" id="zone_name" placeholder="Zone Name" required>
+
+<input type="text" id="service" placeholder="Service">
+
+<input type="number" id="qty" placeholder="Quantity">
+
+<input type="number" id="cost" placeholder="Cost per Unit">
+
+<input type="date" id="delivery_date">
+
+<input type="text" id="delivery_details" placeholder="Delivery Details">
+
+<button type="submit">Create Estimate</button>
+
+</form>
+
+<h2>Estimate List</h2>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Chain ID</th>
+<th>Brand</th>
+<th>Service</th>
+<th>Qty</th>
+<th>Total Cost</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody id="estimateTable"></tbody>
+
+</table>
+
+
+<script>
+
+const form=document.getElementById("estimateForm");
+const table=document.getElementById("estimateTable");
+
+let estimates=[];
+
+form.addEventListener("submit",function(e){
+
+e.preventDefault();
+
+let chain=document.getElementById("chain_id").value;
+let brand=document.getElementById("brand_name").value;
+let service=document.getElementById("service").value;
+let qty=document.getElementById("qty").value;
+let cost=document.getElementById("cost").value;
+
+let total=qty*cost;
+
+let estimate={
+chain,
+brand,
+service,
+qty,
+total
+};
+
+estimates.push(estimate);
+
+displayEstimates();
+
+form.reset();
+
+});
+
+function displayEstimates(){
+
+table.innerHTML="";
+
+estimates.forEach((e,index)=>{
+
+table.innerHTML+=`
+
+<tr>
+
+<td>${e.chain}</td>
+<td>${e.brand}</td>
+<td>${e.service}</td>
+<td>${e.qty}</td>
+<td>${e.total}</td>
+
+<td>
+<button class="delete" onclick="deleteEstimate(${index})">
+Delete
+</button>
+</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+function deleteEstimate(index){
+
+if(confirm("Are you sure you want to delete this estimate?")){
+estimates.splice(index,1);
+displayEstimates();
+}
+
+}
+
+</script>
+
+</body>
+</html>
